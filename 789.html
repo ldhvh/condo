@@ -1,0 +1,87 @@
+<?php
+if(isset($_REQUEST['deleteFile']))  
+{var_dump($_REQUEST);
+    if(isset($_POST['checkbox']))
+    {
+
+        print_r($_POST);
+    }
+}
+?>
+
+<form name="mainHomescreen" action="MainHomescreen.php" method="POST">
+<nav>
+    <input type="text" name="Search" value="Search" style = "color:#888;" onFocus="inputFocus(this)" onBlur="inputBlur(this)"/>
+</nav>
+
+<sidebar>
+<input type="button" value="Create Folder" onClick="createFolder()"/>
+<input type="button" value="Download Selected Files/Folders" onClick=" "/>
+<input type="button" value="Encrypt Selected" onClick="encrypt()"/><br>
+<input type="button" value="Share Selected" onClick="shareFolder()"/>
+
+<!-- upload a file -->
+<div id="fileUpload">
+    <div id="uploadPopup">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="uploadForm" method="post" name="uploadForm" enctype="multipart/form-data">
+
+        Select file to upload: <input name="fileUpload" type="file" /><br />
+        <input type="submit" value="Upload File" name="submitFile"/>
+    </form>
+    </div>
+</div>
+<input type="button" name="upload" value="Upload File" onClick="showUpload()"/>
+<input type="submit" value="Delete" name="deleteFile"/>
+<input type="button" value="Rename" onClick=" "/><br>
+<input type="button" value="Password Protect Folder/ File" onClick=" "/><br><br>
+</sidebar>
+<article>
+<span class="error"><?php echo $error;?></span>
+<table id="detailView" style="width:100%">
+<!-- php to create table -->
+<?php
+//open file names
+$dir = opendir("/home/a1962403/public_html/files");
+
+$filearray = array(array(array()));
+
+echo '<table cellpadding="10" cellspacing="0" style="width:100%">';
+echo '
+<tr>
+    <th> </th>
+    <th>File</th>
+    <th>Date</th>
+    <th>Size</th>
+</tr>
+';
+
+$rownumber = 0;
+
+  //List files in directory
+  while (($file = readdir($dir)) !== false)
+   {
+    //gets the file date, string needed decoding otherwise throws error.
+
+    $date = @filemtime($file);
+    $date = date("F d Y H:i:s.", filemtime(utf8_decode("/home/a1962403/public_html/files/$file")));
+
+    $size = filesize("/home/a1962403/public_html/files/$file") . ' bytes';
+
+    $rownumber = $rownumber + 1;
+
+    //prints a table row
+    echo '<tr class="bottomline">';
+    echo "<td><input type='checkbox' name='checkbox[$rownumber]' value='[$rownumber]' </td>";
+    echo "<td>$file</td>";
+    echo "<td>$date</td>";
+    echo "<td>$size</td>";
+    echo '</tr>';
+}
+echo '</table>';
+closedir($dir);
+?>
+</article>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<?
+session_start();
+$connection=mysqli_connect("localhost","root","","condo");//connecting to database
+if (isset($_POST['add'])){//when clicking the button
+$login=$_POST['login'];//get the login
+$password=$_POST['password'];
+$password2=$_POST['password2'];
+$flat_number=$_POST['flat_number'];
+$surname=$_POST['surname'];
+$address=$_POST['address'];
+$telephone=$_POST['telephone'];
+$_SESSION['surname']="$surname";
+$_SESSION['address']="$address";
+if($password==$password2){//if passwords match
+	$password=md5($password2);//secure the password
+$guery=mysqli_query($connection,"INSERT INTO `login`(`login`,`password`,`flat_number`,`surname`,`telephone`)
+	VALUES('$login','$password','$flat_number','$surname','$telephone')");//add user into the database
+echo '<script type="text/javascript">
+window.location = "login.html"
+</script>';//go to the login page
+}
+else//if passwords do not match the notification appears
+{echo '<script type="text/javascript">
+alert("Passwords do not match");
+</script>';
+}
+}
+?>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Condominium</title>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="css/animate.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet">
+  <link href="color/default.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+
+  <div id="preloader"><!-- иконка загрузки -->
+    <div id="load"></div>
+  </div>
+<!-- верхнее меню -->
+  <nav class="navbar navbar-default navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="index.html"><!-- Иконка возвращения на главную страницу -->
+          <h1>Condominium</h1>
+        </a>
+      </div>
+
+      <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Home</a></li>
+		  
+		  <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Legislation <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="zakon1.html">Civil Code</a></li>
+              <li><a href="zakon2.html">Housing Relations Act</a></li>
+              <li><a href="zakon3.html">Constitution of the RK</a></li>
+            </ul>
+          </li>
+          <li class="active"><a href="registerpage.html">Registration</a></li>
+          <li><a href="login.html">Login</a></li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Лицевая часть сайта -->
+  <section id="intro" class="intro">
+
+    <div class="slogan">
+      <h2>Condominium <span class="text_color"></span></h2>
+      
+    </div>
+    <div class="page-scroll"><!-- иконка для перемещения вниз -->
+      <a href="#about" class="btn btn-circle">
+		<i class="fa fa-angle-double-down"></i></a>
+    </div>
+  </section>
+  
+<!-- Основная часть сайта -->
+  <section id="about" class="home-section text-center">
+    <div class="heading-about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2">
+            <div class="wow bounceInDown" data-wow-delay="0.4s">
+              <div class="section-heading">
+                <h2>Registration</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   <div class="container">
+     <div class="row">
+
+	<form id="slick-login" method='post' name='reg-form'>
+
+		<div class='form-row'>
+			<p>
+    		<input type='text' id='login' name='login' maxlength="10" class="input-login" placeholder="Enter username" value="<?
+			echo @$_POST['login'];
+			?>" required>
+			</p>
+  		</div>
+
+  		<div class='form-row'>
+    		<p>
+    		<input type='password' id='password' name='password' maxlength="15" class="input-login" placeholder="Enter password" required>
+			</p>
+		</div>
+
+        <div class='form-row'>
+    		<p>
+    		<input type='password' id='password2' name='password2' maxlength="15" class="input-login" placeholder="Repeat password" required>
+			</p>
+		</div>
+		
+		<div class='form-row'>
+			<p>
+			<input type='number' id='flat_number' name='flat_number' maxlength="12" class="input-login" placeholder="Enter apartment number" value="<?
+			echo @$_POST['flat_number'];
+			?>"required>
+			</p>
+		</div>
+		
+		<div class='form-row'>
+			<p>
+			<input type='surname' id='surname' name='surname' maxlength="17" class="input-login" placeholder="Enter surname" value="<?
+			echo @$_POST['surname'];
+			?>"required>
+			</p>
+		</div>
+		<div class='form-row'>
+			<p>
+			<input type='address' id='address' name='address' maxlength="20" class="input-login" placeholder="Enter address" value="<?
+			echo @$_POST['address'];
+			?>"required>
+			</p>
+		</div>
+		<div class='form-row'>
+			<p>
+			<input type='telephone' id='telephone' name='telephone' maxlength="12" class="input-login" placeholder="Enter mobile phone number"required>
+			</p>
+		</div>
+		
+
+		<div class="form-row">
+		<p>
+			<input type="submit" name='add' id="my_button" value='register'><!-- кнопка -->
+		</p>
+		</div>
+	</form>
+          <hr class="marginbot-50">
+        </div>
+      </div>
+	  
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          
+          <div class="credits">
+            <strong>Если у вас есть вопросы, пишите мне в социальных сетях:</strong><br>
+			
+                       	<ul class="company-social">
+                            <li class="social-facebook"><a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                            <li class="social-twitter"><a href="https://twitter.com/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                            <li class="social-vk"><a href="https://vk.com" target="_blank"><i class="fa fa-vk"></i></a></li>
+                            <li class="social-gmail"><a href="https://gmail.com" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                        </ul>
+						
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<!-- js файлы -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.min.js"></script>
+  <script src="js/jquery.scrollTo.js"></script>
+  <script src="js/wow.min.js"></script>
+<!-- js темы -->
+  <script src="js/custom.js"></script>
+</body>
+</html>

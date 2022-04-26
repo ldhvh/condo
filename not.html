@@ -1,0 +1,169 @@
+<?
+session_start();
+$surname = $_SESSION['surname'];
+$login = $_SESSION['login'];
+$connection=mysqli_connect('localhost','root','','db.con');
+$address2 = mysqli_query($connection,"SELECT address FROM `login` WHERE login='$login'");
+$address3=mysqli_fetch_array($address2);
+$address1 = $address3[0];
+?>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Кондоминиум</title>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="css/animate.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet">
+  <link href="color/default.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+
+  <div id="preloader"><!-- иконка загрузки -->
+    <div id="load"></div>
+  </div>
+<!-- верхнее меню -->
+  <nav class="navbar navbar-default navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="index.html"><!-- Иконка возвращения на главную страницу -->
+          <h1>Кондоминиум</h1>
+        </a>
+      </div>
+
+      <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Главная</a></li>
+          
+		  <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Законодательство <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="zakon1.html">Гражданский кодекс</a></li>
+              <li><a href="zakon2.html">Закон о жилищных отношениях</a></li>
+              <li><a href="zakon3.html">Конституция РК</a></li>
+            </ul>
+          </li>
+          <li><a href="logout.html">Выйти</a></li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Лицевая часть сайта -->
+  <section id="intro" class="intro">
+
+    <div class="slogan">
+      <h2>Кондоминиум <span class="text_color"></span></h2>
+      
+    </div>
+    <div class="page-scroll"><!-- иконка для перемещения вниз -->
+      <a href="#about" class="btn btn-circle">
+		<i class="fa fa-angle-double-down"></i></a>
+    </div>
+  </section>
+  
+<!-- Основная часть сайта -->
+  <section id="about" class="home-section text-center">
+    <div class="heading-about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2">
+            <div class="wow bounceInDown" data-wow-delay="0.4s">
+              <div class="section-heading">
+                <h3>Расчет тарифа за экплуационное обслуживание, содержание жилого дома, внутридомовых территории и инженерного оборудования жилого комплекса</h3>
+				<h6>за месяц:
+				
+
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row"><p>
+<table border="1" align="center" width="900" height="200">
+<tr>
+<td>За год</td>
+<td>Заработная плата административно-управленческого и технического персоналов</td>
+<td>Электроэнергия на технические нужды и освещение мест общего пользования</td>
+<td>Отопление мест общего пользования</td>
+<td>Холодное водоснабжение</td>
+<td>Хозяйственные расходы</td>
+<td>Дезинфекция</td>
+<td>Итого: Себестоимость содержания и обслуживания жилого дома</td>
+</tr>
+<?
+function fetch_da()
+{
+$connection=mysqli_connect('localhost','root','','db.con');
+
+$result= mysqli_query($connection,"SELECT * FROM `tex` WHERE адрес='$address1'");
+while ($r1= mysqli_fetch_array($result)){
+	$output.="
+	<tr>
+	<td>$r1[год]</td>
+	<td>$r1[зарплата]</td>
+	<td>$r1[электр]</td>
+	<td>$r1[отоп]</td>
+	<td>$r1[вода]</td>
+	<td>$r1[хоз]</td>
+	<td>$r1[дез]</td>
+	<td>$r1[итог]</td>
+	</tr>
+";
+}
+
+return$output;
+}
+
+echo fetch_da();
+?>
+</table>
+          <hr class="marginbot-50">
+        </div>
+      </div>
+	  
+  </section>
+  
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          
+          <div class="credits">
+            <strong>Если у вас есть вопросы, пишите мне в социальных сетях:</strong><br>
+			
+                       	<ul class="company-social">
+                            <li class="social-facebook"><a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                            <li class="social-twitter"><a href="https://twitter.com/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                            <li class="social-vk"><a href="https://vk.com" target="_blank"><i class="fa fa-vk"></i></a></li>
+                            <li class="social-gmail"><a href="https://gmail.com" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                        </ul>
+						
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- js файлы -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.min.js"></script>
+  <script src="js/jquery.scrollTo.js"></script>
+  <script src="js/wow.min.js"></script>
+  <!-- js темы -->
+  <script src="js/custom.js"></script>
+</body>
+</html>

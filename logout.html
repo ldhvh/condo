@@ -1,0 +1,10 @@
+<?
+session_start();
+$_SESSION["login"] = null;//deleting saved login,apartment number and password
+$_SESSION["flat_number"] = null;
+$_SESSION["password"] = null;
+session_destroy();
+echo '<script type="text/javascript">
+window.location = "login.html"
+</script>';	//switch to the login page
+?>

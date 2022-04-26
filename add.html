@@ -1,0 +1,295 @@
+<?
+$connection=mysql_connect("localhost","root","");
+mysql_select_db("condo");//connecting to the database
+if (isset($_POST['add'])){//when the button is clicked
+$flat_number=$_POST['flat_number'];//get the entered info
+$year=$_POST['year'];
+$month=$_POST['month'];
+$tech=$_POST['tech'];
+$water=$_POST['water'];
+$heating=$_POST['heating'];
+$lift=$_POST['lift'];
+$paid=$_POST['paid'];
+$remainder=$_POST['remainder'];
+$payment=$tech+$water+$heating+$lift;//add to get a total payment
+
+$guery=mysql_query("INSERT INTO `invoices`(`flat_number`,`year`,`month`,`tech`,`water`,`heating`,`lift`,`payment`,`paid`,`remainder`)
+	VALUES('$flat_number','$year','$month','$tech','$water','$heating','$lift','$payment','$paid','$remainder')");
+}//insert the info into database
+if (isset($_POST['add2'])){//when the button is clicked
+$tech_tariff=$_POST['tech_tariff'];//get the entered tariffs
+$water_tariff=$_POST['water_tariff'];
+$heating_tariff=$_POST['heating_tariff'];
+$lift_tariff=$_POST['lift_tariff'];
+//update the tariffs if any changed
+$guery=mysql_query("UPDATE tariffs SET tariff=$lift_tariff where id='1'");
+$guery=mysql_query("UPDATE tariffs SET tariff=$water_tariff  where id='4'");
+$guery=mysql_query("UPDATE tariffs SET tariff=$heating_tariff  where id='3'");
+$guery=mysql_query("UPDATE tariffs SET tariff=$tech_tariff  where id='2'");
+}
+?>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Кондоминиум</title>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="css/animate.css" rel="stylesheet"/>
+  <link href="css/style.css" rel="stylesheet">
+  <link href="color/default.css" rel="stylesheet">
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+
+  <div id="preloader"><!-- иконка загрузки -->
+    <div id="load"></div>
+  </div>
+<!-- верхнее меню -->
+  <nav class="navbar navbar-default navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+				
+        <a class="navbar-brand" href="index.html"><!-- Иконка возвращения на главную страницу -->
+          <h1>Кондоминиум</h1>
+        </a>
+      </div>
+
+      <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Главная</a></li>
+          
+		  <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Законодательство <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="zakon1.html">Гражданский кодекс</a></li>
+              <li><a href="zakon2.html">Закон о жилищных отношениях</a></li>
+              <li><a href="zakon3.html">Конституция РК</a></li>
+            </ul>
+          </li>
+          <li><a href="logout.html">Выйти</a></li>
+        </ul>
+      </div></div>
+	</nav>
+
+  <!-- Лицевая часть сайта -->
+  <section id="intro" class="intro">
+
+    <div class="slogan">
+      <h2>Кондоминиум <span class="text_color"></span></h2>
+    </div>
+	
+    <div class="page-scroll"><!-- иконка для перемещения вниз -->
+		<a href="#about" class="btn btn-circle">
+			<i class="fa fa-angle-double-down"></i>
+		</a>
+    </div>
+  </section>
+  
+  <!-- Основная часть сайта -->
+  <section id="about" class="home-section text-center">
+    <div class="heading-about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2">
+            <div class="wow bounceInDown" data-wow-delay="0.4s">
+             <!-- <div class="section-heading">
+                <h2>Ввод данных</h2>
+              </div>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<!--<p><h4><a href="log_req.php">Заявки на регистрацию</a></h4></p>
+	-->
+	    <div class="container">
+      <div class="row">
+<!--<form method='post' name='add-notice-form'>
+<br>
+<p>Сообщение об оплате</p>
+<table name = "add_notice_tab" border="1" align="center" width="700" height="200">
+<tr>
+<td>квартира</td>
+<td>год</td>
+<td>месяц</td>
+<td>техобслуживание</td>
+<td>подогрев горячей воды</td>
+<td>тепло энергия (отопление)</td>
+<td>лифт</td>
+<td>всего к оплате</td>
+</tr>
+<tr>
+<td><div><input type="number" id="kv1" name="kv1" class = "input-add-note"></div></td>
+
+<td><div><input type="number" id="year1" name="year1" class = "input-add-note"></div></td>
+
+<td><div><input type="text" id="month1" name="month1" class = "input-add-note"></div></td>
+
+<td><div><input type="number" id="tech1" name="tech1" class = "input-add-note"></div></td>
+
+<td><div><input type="number" id="voda1" name="voda1" class = "input-add-note"></div></td>
+
+<td><div><input type="number" id="otop1" name="otop1" class = "input-add-note"></div></td>
+
+<td><div><input type="number" id="lift1" name="lift1" class = "input-add-note"></div></td>
+
+<td><div><output id = "vsego1" name="vsego1" class = "input-add-note"></div></td>
+</tr>
+</table> 
+<script>
+        let a = document.getElementById("tech1");
+        let b = document.getElementById("voda1");
+		let c = document.getElementById("otop1");
+		let d = document.getElementById("lift1");
+        let summa = document.getElementById("vsego1");
+
+        let numberChecker = () => {
+            let regex = /^[-+]?\d+(\.\d+)?$/;
+ 
+            if (regex.test(a.value) && regex.test(b.value)&& regex.test(c.value)&& regex.test(d.value))
+                summa.innerText = (+a.value + +b.value + +c.value + +d.value).toString();
+        }
+ 
+        a.addEventListener("input", numberChecker);
+        b.addEventListener("input", numberChecker);
+		c.addEventListener("input", numberChecker);
+		d.addEventListener("input", numberChecker);
+    </script>
+	<br>
+	<div class="form-row">
+			<input type="submit" name='inform' id="my_button" value='сообщить'>
+		</div>-->
+<form method='post' name='add-invoice-form'><!-- таблица для редактирования счетов квартир -->
+<br>
+<p><h6>Invoices</h6></p>
+<table name ="add_invoice_tab" border="1" align="center" width="700" height="200">
+<tr>
+<td>apartment number</td>
+<td>year</td>
+<td>month</td>
+<td>technical service</td>
+<td>water heating</td>
+<td>heating</td>
+<td>lift</td>
+<td>payment</td>
+<td>paid</td>
+<td>remainder</td>
+</tr>
+<tr>
+<td><div><input type="number" id="flat_number" name="flat_number"></div></td>
+
+<td><div><input type="number" id="year" name="year"></div></td>
+
+<td><div><input type="text" id="month" name="month"></div></td>
+
+<td><div><input type="number" id='tech' name='tech'></div></td>
+
+<td><div><input type="number" id="water" name="water"></div></td>
+
+<td><div><input type="number" id="heating" name="heating"></div></td>
+
+<td><div><input type="number" id="lift" name="lift"></div></td>
+
+<td><div><output id = "payment" name="payment"></div></td>
+
+<script><!-- js для автоматического суммирования всех цифр(за воду, отопление, лифт и тд) -->
+        let e = document.getElementById("tech");
+        let f = document.getElementById("water");
+		let g = document.getElementById("heating");
+		let h = document.getElementById("lift");
+        let i = document.getElementById("payment");
+
+        let numberCheck = () => {
+            let reg = /^[-+]?\d+(\.\d+)?$/;
+ 
+            if (reg.test(e.value) && reg.test(f.value)&& reg.test(g.value)&& reg.test(h.value))
+                i.innerText = (+e.value + +f.value + +g.value + +h.value).toString();
+        }
+ 
+        e.addEventListener("input", numberCheck);
+        f.addEventListener("input", numberCheck);
+		g.addEventListener("input", numberCheck);
+		h.addEventListener("input", numberCheck);
+    </script>
+
+<td><div><input type='number' id='paid' name='paid'></div></td>
+
+<td><div><input type='number' id='remainder' name='remainder'></div></td>
+</tr>
+</table> 
+	<br>
+	<div class="form-row"><!-- кнопка изменить -->
+			<input type="submit" name='add' id="my_button" value='add'>
+	</div>
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<form method='post' name='add-tariff-form'><!-- таблица для редактирования тарифов -->
+</br>
+<p><h6>Tariffs</h6></p>
+<table name = "add_tariff_tab" border="1" align="center" width="500" height="200">
+<tr>
+<td>technical service</td>
+<td>water heating</td>
+<td>heating</td>
+<td>lift</td>
+</tr>
+<tr>
+<td><input type='number' id='tech_tariff' name='tech_tariff' class = "input-tariff"></td>
+
+<td><input type='number' id='water_tariff' name='water_tariff' class = "input-tariff"></td>
+
+<td><input type='number' id='heating_tariff' name='heating_tariff' class = "input-tariff"></td>
+
+<td><input type='number' id='lift_tariff' name='lift_tariff' class = "input-tariff"></td>
+
+</tr>
+</table> 
+
+<br>
+		<div class="form-row"><!-- кнопка изменить -->
+			<input type="submit" name='add2' id="my_button" value='submit'>
+		</div>
+</form>
+</br>
+          <hr class="marginbot-50">
+        </div>
+      </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          
+          <div class="credits">
+            <strong>Если у вас есть вопросы, пишите мне в социальных сетях:</strong><br>
+			
+                       	<ul class="company-social">
+                            <li class="social-facebook"><a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                            <li class="social-twitter"><a href="https://twitter.com/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                            <li class="social-vk"><a href="https://vk.com" target="_blank"><i class="fa fa-vk"></i></a></li>
+                            <li class="social-gmail"><a href="https://gmail.com" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                        </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- js файлы -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.min.js"></script>
+  <script src="js/jquery.scrollTo.js"></script>
+  <script src="js/wow.min.js"></script>
+  <!-- js темы -->
+  <script src="js/custom.js"></script>
+
+</body>
+
+</html>

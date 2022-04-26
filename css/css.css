@@ -1,0 +1,34 @@
+.section {
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.section>div {
+  width: 50%;
+}
+
+.content-right {
+  margin: 2em;
+}
+.content-left {
+  margin-left: 2em;
+}
+img {
+  display: block;
+  margin: auto;
+}
+img:nth-child(3) {
+  width: 50%;
+  margin: -2rem 0 0 40%;
+  position:relative;
+}
+
+@media (max-width: 500px) {
+  .section {
+    display: block;
+  }
+  .section>div {
+    width: auto;
+  }
+}

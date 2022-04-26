@@ -1,0 +1,136 @@
+<?
+session_start();//starting session to save the user info
+$connection=mysqli_connect('localhost','root','','condo');//connecting to database
+$flat_number = $_SESSION['flat_number'];//saving user info
+$login = $_SESSION['login'];
+$address = $_SESSION['address'];
+$surname = mysqli_query($connection,"SELECT * FROM `login` WHERE login='$login'");
+$sur= mysqli_fetch_array($surname);//user surname
+$ad = mysqli_query($connection,"SELECT * FROM `login` WHERE login='$login'");
+$a1= mysqli_fetch_array($ad);
+$l="Abaya, ".$flat_number;//address of resident (like Abaya 7)
+$result= mysqli_query($connection,"SELECT * FROM `invoices` WHERE flat_number='$flat_number'");
+$r1= mysqli_fetch_array($result);//collecting the data from invoices table
+$result2= mysqli_query($connection,"SELECT * FROM `tariffs`");
+$r2= mysqli_fetch_array($result2);//collecting the data from tariffs table
+
+
+require_once("TCPDF/tcpdf.php");
+// create new PDF document
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('.');
+$pdf->SetTitle('invoice.pdf');
+$pdf->SetSubject('Your invoice');
+$pdf->SetKeywords('invoice, PDF');
+
+// set default header data
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.'Invoice', PDF_HEADER_STRING);
+
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
+
+// ---------------------------------------------------------
+
+// set font
+$pdf->SetFont('helvetica', '', 10);
+
+// add a page
+$pdf->AddPage();
+
+// set cell padding
+$pdf->setCellPaddings(1, 1, 1, 1);
+
+// set cell margins
+$pdf->setCellMargins(1, 1, 1, 1);
+
+// set color for background
+$pdf->SetFillColor(255, 255, 127);
+
+// MultiCell($w, $h, $txt, $border=0, $align='J', $fill=0, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0)
+//writing resident's surname and address
+$text='<p>
+<br><div align="left"><h4>Condominium</h4></div>
+<br><div align="left">'.$sur[surname].'</div>
+<br><div align="left">'.$l.'</div>
+';
+//invoices table
+ $table='<table name = "pdf_invoice_tab" style="border:1px solid #000; padding:6px;">';
+ $table.='<tr>
+             <td style="border:1px solid #000;"> month </td>
+			 <td style="border:1px solid #000;"> service </td>
+			 <td style="border:1px solid #000;"> hot water heating </td>
+			 <td style="border:1px solid #000;"> thermal energy (heating) </td>
+			 <td style="border:1px solid #000;"> lift </td>
+			 <td style="border:1px solid #000;"> total payment </td>
+			 <td style="border:1px solid #000;"> paid for </td>
+			 <td style="border:1px solid #000;"> remainder </td>
+    </tr>';
+//tariffs table
+	$table2='<table name = "pdf_tariff_tab" style="border:1px solid #000; padding:6px;">';
+ $table2.='<tr>
+             <th style="border:1px solid #000;"> name </th>
+			 <th style="border:1px solid #000;"> pay </th>
+			 <th style="border:1px solid #000;"> unit </th>
+			 </tr>';
+foreach($result2 as $r2){
+//tariffs
+	$table2.='<tr>
+	    <th style="border:1px solid #000;">'.$r2[name].'</th>
+	     <th style="border:1px solid #000;">'.$r2[tariff].'</th>
+		 <th style="border:1px solid #000;">'.$r2[unit].'</th>
+	    </tr>';
+}
+foreach($result as $r1){	
+//invoice' details from the database
+		 $table.='<tr>
+	    <td style="border:1px solid #000;">'.$r1[month].'</td>
+		 <td style="border:1px solid #000;">'.$r1[tech].'</td>
+	     <td style="border:1px solid #000;">'.$r1[water].'</td>
+	     <td style="border:1px solid #000;">'.$r1[heating].'</td>
+		 <td style="border:1px solid #000;">'.$r1[lift].'</td>
+		 <td style="border:1px solid #000;">'.$r1[payment].'</td>
+		 <td style="border:1px solid #000;">'.$r1[paid].'</td>
+		 <td style="border:1px solid #000;">'.$r1[remainder].'</td>
+		 
+	     </tr>';
+	
+	 
+}
+	$table.='</table>';
+$table2.='</table>';
+$pdf->WriteHTMLCell(0, 0, '','',$text,0,1,0,true,'C',true);
+$pdf->WriteHTMLCell(0, 0, '','',$table2,0,1,0,true,'C',true);
+$pdf->WriteHTMLCell(0, 0, '','',$table,0,1,0,true,'C',true);
+// move pointer to last page
+$pdf->lastPage();
+
+// ---------------------------------------------------------
+
+//Close and output PDF document
+$pdf->Output('invoice', 'I');
+?>
+
+
